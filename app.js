@@ -17,7 +17,7 @@ mongoose.connect(url, {
   useCreateIndex: true,
 }, (err) => {
   if(err) console.log('mongo error')
-  else process.env.MONGODB_URL ? console.log('Connected db deploy') : console.log('Connected db local')
+  else process.env.MONGODB_URL ? console.log('Connected db deploy') : console.log('Connected db ' + process.env.NODE_ENV)
 });
 
 app.use(cors())

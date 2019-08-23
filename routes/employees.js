@@ -1,14 +1,16 @@
 const router = require('express').Router()
 const EmployeeController = require('../controllers/employee')
 const multer = require('multer')
-global.__basedir = __dirname;
+
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) {
-      cb(null, __basedir + '/excelTmp/')
+    console.log(__basedir + '/excelTmp/')
+    cb(null, '/Users/jays/hacktiv/pinal_projec/server/excelTmp/')
   },
   filename: function (req, file, cb) {
-      var datetimestamp = Date.now();
-      cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+    console.log(file, '<<<<<<<<')
+    var datetimestamp = Date.now();
+    cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
   }
 });
 

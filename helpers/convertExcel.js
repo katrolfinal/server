@@ -1,22 +1,20 @@
 const excelToJson = require('convert-excel-to-json')
+const fs = require('fs')
 
-global.__basedir = __dirname;
 
-module.exports = (file) => {
+
+module.exports = (filepath) => {
   return excelToJson({
-    sourceFile: __basedir + '/excelTmp/' + file.filename,
-    header : {
+    sourceFile: filepath,
+    header: {
       rows: 1
     },
-    sheets: [{
-      name: 'Employees',
-      columnToKey: {
-        A: 'name',
-        B: 'address',
-        C: 'phone',
-        D: 'department',
-        E: 'email'
-      }
-    }]
+    columnToKey: {
+      A: 'name',
+      B: 'address',
+      C: 'phone',
+      D: 'department',
+      E: 'email'
+    }
   })
 }
