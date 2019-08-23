@@ -26,7 +26,10 @@ const employeeSchema = new Schema({
   contacts : [{
     type: Schema.Types.ObjectId,
     ref: 'Employee'
-  }]
+  }],
+  password : {
+    type: String
+  }
 })
 
 const Employee = model('Employee', employeeSchema)

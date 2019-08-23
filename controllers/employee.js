@@ -39,20 +39,21 @@ class EmployeeController {
   static async bulkInsert(req, res, next) {
     try {
       if(req.file) {
-        const filePath = __basedir + '/excelTmp/' + file.filename
-        const { Employees } = convertExcel(filePath)
-        console.log(Employees)
-        const arr = []
-        // Employees.forEach(emp => {
-        //   emp.company = req.company._id
-        //   emp.password = getPassword.generate({
-        //     length: 8,
-        //     numbers: true
-        //   })
-        //   arr.push(Employee.create(emp))
-        // })
-        const result = await Promise.all(arr)
+        const filePath = '/Users/jays/hacktiv/pinal_projec/server/excelTmp/' + req.file.filename
+        const { Sheet1 } = convertExcel(filePath)
         fs.unlinkSync(filePath)
+        const arr = []
+        Sheet1.forEach(emp => { 
+          // emp.company = req.company._id
+          
+          emp.password = getPassword.generate({
+            length: 8,
+            numbers: true
+          })
+          console.log(emp)
+          arr.push(Employee.create(emp))
+        })
+        const result = await Promise.all(arr)
         res.status(200).json(result)
       } else throw {status : 400, message : 'No file'}
     } catch (error) {
