@@ -50,6 +50,7 @@ class EmployeeController {
             length: 8,
             numbers: true
           })
+          console.log(emp)
           arr.push(Employee.create(emp))
         })
         const result = await Promise.all(arr)

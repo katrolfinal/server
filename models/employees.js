@@ -27,7 +27,7 @@ const employeeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Employee'
   }],
-  passsword : {
+  password : {
     type: String
   }
 })
