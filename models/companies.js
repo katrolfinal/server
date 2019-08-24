@@ -5,10 +5,6 @@ const companySchema = new Schema({
   name : {
     type: String
   },
-  password : {
-    type: String,
-    required: [true, 'Password must be required' ]
-  },
   username : {
     type: String,
     default: 'admin',
