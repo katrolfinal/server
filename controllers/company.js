@@ -13,7 +13,9 @@ class CompanyController {
   static async create (req, res, next) {
     try {
       const { name, username, email } = req.body
-      
+      const input = { name, username, email}
+      const result = await Company.create(input)
+      res.status(201).json(result)
     } catch (error) {
       next(error)
     }

@@ -44,8 +44,7 @@ class EmployeeController {
         fs.unlinkSync(filePath)
         const arr = []
         Sheet1.forEach(emp => { 
-          // emp.company = req.company._id
-          
+          // emp.company = req.company._id 
           emp.password = getPassword.generate({
             length: 8,
             numbers: true
