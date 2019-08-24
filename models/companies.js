@@ -21,7 +21,7 @@ const companySchema = new Schema({
       validator: function(value) {
         return new Promise ((resolve, reject) => {
           if(this.isNew) {
-            User.findOne({email: value})
+            Company.findOne({email: value})
             .then (member => {
               if (member){
                 resolve (false)
