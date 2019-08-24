@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const EmployeeController = require('../controllers/employee')
 const multer = require('multer')
+const { authCompany } = require('../middlewares/authentication')
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) {
@@ -18,6 +19,9 @@ var uploadExcel = multer({ storage })
 
 
 router.get('/', EmployeeController.findALl)
+
+router.use(authCompany)
+
 router.get('/byCompany/:companyId', EmployeeController)
 router.get('/byloggedin', EmployeeController.findById)
 router.get('/contacts', EmployeeController)

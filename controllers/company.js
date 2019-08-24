@@ -29,12 +29,11 @@ class CompanyController {
 
   static async create (req, res, next) {
     try {
-      console.log('masuk')
       const { email, name, password } = req.body
       const input = { email, name, password }
       if(req.file && req.file.gcsUrl) { 
         input.logo = req.file.gcsUrl
-      }
+      } 
       const result = await Company.create(input)
       res.status(201).json(result)
     } catch (error) {

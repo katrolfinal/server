@@ -6,6 +6,7 @@ const fs = require('fs')
 global.__basedir = __dirname;
 
 class EmployeeController {
+  
   static async findALl(req, res, next) {
     try {
       const employees = await Employee.find()

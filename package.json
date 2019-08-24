@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test --timeout 10000 --exit",
-    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
-    "dev" : "NODE_ENV=development nodemon app.js"
+    "test": "NODE_ENV=test nyc mocha --exit --timeout 10000",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "nyc": {
     "_comment": "Purpose of this part: to do code coverage within Mocha/Chai using Istanbul",
