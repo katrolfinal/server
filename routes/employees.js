@@ -14,13 +14,14 @@ var storage = multer.diskStorage({
   }
 });
 
-var upload = multer({ storage })
+var uploadExcel = multer({ storage })
+
 
 router.get('/', EmployeeController.findALl)
 router.get('/byCompany/:companyId', EmployeeController)
 router.get('/byloggedin', EmployeeController.findById)
 router.get('/contacts', EmployeeController)
-router.post('/', upload.single('file'), EmployeeController.bulkInsert)
+router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert)
 router.delete('/:employeeId', EmployeeController.delete)
 router.delete('/contacts/:employeeId', EmployeeController.deleteContact)
 

@@ -1,6 +1,7 @@
 const Employee = require('../models/employees')
 const convertExcel = require('../helpers/convertExcel')
 const getPassword = require('generate-password')
+const { getToken } = require('../helpers/jwt')
 const fs = require('fs')
 global.__basedir = __dirname;
 
@@ -44,8 +45,7 @@ class EmployeeController {
         fs.unlinkSync(filePath)
         const arr = []
         Sheet1.forEach(emp => { 
-          // emp.company = req.company._id
-          
+          // emp.company = req.company._id 
           emp.password = getPassword.generate({
             length: 8,
             numbers: true
@@ -122,6 +122,21 @@ class EmployeeController {
         const result = await employee.save()
         res.status(200).json(result)
       } else throw { status : 404, resource : 'employee'}
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async login(req, res, next) {
+    try {
+      const { email, password } = req.body
+      const employee = await Employee.findOne({email, password})
+      if(employee) {
+        delete employee.password
+        console.log(employee)
+        const token = getToken(employee)
+        res.status(200).json({token, employee})
+      } else throw { status : 400, message: 'Wrong email / password'}
     } catch (error) {
       next(error)
     }

@@ -5,10 +5,6 @@ const companySchema = new Schema({
   name : {
     type: String
   },
-  password : {
-    type: String,
-    required: [true, 'Password must be required' ]
-  },
   username : {
     type: String,
     default: 'admin',
@@ -60,7 +56,7 @@ const companySchema = new Schema({
 })
 
 
-usersSchema.pre('save', function(next) {
+companySchema.pre('save', function(next) {
   if(!this.isModified('password')) {
     return next();
   }
