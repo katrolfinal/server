@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test --timeout 10000 --exit",
-    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "test": "nyc mocha --exit",
     "dev" : "NODE_ENV=development nodemon app.js"
   },
   "nyc": {
