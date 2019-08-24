@@ -1,7 +1,9 @@
 const Company = require('../models/companies')
 const { comparePassword } = require('../helpers/bcrypt')
 const { getToken } = require('../helpers/jwt')
+
 class CompanyController {
+  
   static async findAll(req, res, next) {
     try {
       const companies = await Company.find()

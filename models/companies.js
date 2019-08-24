@@ -56,7 +56,7 @@ const companySchema = new Schema({
 })
 
 
-usersSchema.pre('save', function(next) {
+companySchema.pre('save', function(next) {
   if(!this.isModified('password')) {
     return next();
   }
