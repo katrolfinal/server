@@ -9,7 +9,7 @@ const upload = _multer({
   },
 });
 
-router.post('/login', CompanyController.create )
-router.post('/register', upload.single('image'), sendUploadToGCS, CompanyController.login)
+router.post('/login', CompanyController.login )
+router.post('/register', upload.single('image'), sendUploadToGCS, CompanyController.create)
 
 module.exports = router

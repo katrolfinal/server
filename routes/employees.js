@@ -24,6 +24,7 @@ router.get('/contacts', EmployeeController)
 router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert)
 router.delete('/:employeeId', EmployeeController.delete)
 router.delete('/contacts/:employeeId', EmployeeController.deleteContact)
+router.post('/login', EmployeeController.login)
 
 
 module.exports = router
