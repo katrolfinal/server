@@ -33,6 +33,7 @@ router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert)
 router.post('/uploadImage', uploadImage.single('file'), sendUploadToGCS, EmployeeController)
 router.delete('/:employeeId', EmployeeController.delete)
 router.delete('/contacts/:employeeId', EmployeeController.deleteContact)
+router.post('/login', EmployeeController.login)
 
 
 module.exports = router
