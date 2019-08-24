@@ -141,6 +141,16 @@ class EmployeeController {
       next(error)
     }
   }
+
+  static async uploadImage(req, res, next) {
+    try {
+      const { gcsUrl } = req.file
+      const employee = await Employee.findByIdAndUpdate(req.employee._id, { image : gcsUrl }, {new : true})
+      res.status(200).json(employee)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = EmployeeController
