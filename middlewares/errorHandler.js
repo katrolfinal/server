@@ -26,7 +26,7 @@ module.exports = function(err, req, res, next) {
     let errors = [err.message]
     res.status(err.status).json({ errors })
   } else {
-    console.log(err)
+    // console.log(err)
     res.status(500).json({
       message: 'Internal server error, check the console',
     });
