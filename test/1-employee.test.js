@@ -22,7 +22,7 @@ chai.use(chaiHttp)
 describe('Employee testing' , function () {
   this.timeout(0)
   before(async () => {
-    await createCompany()
+    // await createCompany()
     console.log('company created')
   })
 

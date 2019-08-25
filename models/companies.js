@@ -20,6 +20,7 @@ const companySchema = new Schema({
     validate: [{
       validator: function(value) {
         return new Promise ((resolve, reject) => {
+          /* istanbul ignore else */
           if(this.isNew) {
             Company.findOne({email: value})
             .then (member => {
@@ -29,10 +30,14 @@ const companySchema = new Schema({
                 resolve (true)
               }
             })
-            .catch(err => {
+            .catch(
+              /* istanbul ignore next */
+              err => {
               reject (err)
             })
+            
           } else {
+            
             resolve(true)
           }
         })
@@ -58,6 +63,7 @@ const companySchema = new Schema({
 
 companySchema.pre('save', function(next) {
   if(!this.isModified('password')) {
+    /* istanbul ignore next */
     return next();
   }
   this.password = hashPassword(this.password)

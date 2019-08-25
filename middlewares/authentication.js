@@ -6,16 +6,17 @@ const { verifyToken } = require('../helpers/jwt')
 module.exports = {
   authEmployee : async (req, res, next) => {
     try {
+      /* istanbul ignore else */
       if(req.headers.hasOwnProperty('token')) {
         const {employee} = verifyToken(req.headers.token)
-        
         const check = await Employee.findById(employee._id)
+        /* istanbul ignore else */
         if(check) {
           req.employee = employee
           next()
         } else throw {}
       } else throw {}
-    } catch (error) {
+    } catch ( /* istanbul ignore next */ error) {
       next({status : 400, message : 'you must login first'})
     }
   },
@@ -24,12 +25,13 @@ module.exports = {
       if(req.headers.hasOwnProperty('token')) {
         const {company} = verifyToken(req.headers.token)
         const check = await Company.findById(company._id)
+        /* istanbul ignore else */
         if(check) {
           req.company = company
           next()
         } else throw {}
       } else throw {}
-    } catch (error) {
+    } catch (/* istanbul ignore next */ error) {
       next({status : 400, message : 'you must login first'})
     }
   }
