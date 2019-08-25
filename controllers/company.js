@@ -19,7 +19,7 @@ class CompanyController {
       const company = await Company.findOne({email})
       if(company && comparePassword(company.password, password)) {
         delete company.password
-        const token = getToken(company)
+        const token = getToken({ company })
         res.status(200).json({token, company})
       } else throw { status: 404, message : 'Wrong email / password'}
     } catch (error) {
@@ -29,6 +29,8 @@ class CompanyController {
 
   static async create (req, res, next) {
     try {
+      console.log('masuk')
+      console.log('req.body: ', req.body);
       const { email, name, password } = req.body
       const input = { email, name, password }
       if(req.file && req.file.gcsUrl) { 
@@ -37,6 +39,7 @@ class CompanyController {
       const result = await Company.create(input)
       res.status(201).json(result)
     } catch (error) {
+      // console.log('error: ', error);
       next(error)
     }
   }

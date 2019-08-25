@@ -4,7 +4,7 @@ const { verifyToken } = require('../helpers/jwt')
 
 
 module.exports = {
-  authEmployee = async (req, res, next) => {
+  authEmployee : async (req, res, next) => {
     try {
       if(req.headers.hasOwnProperty('token')) {
         const decoded = verifyToken(req.headers.token)
@@ -18,7 +18,7 @@ module.exports = {
       next({status : 400, message : 'you must login first'})
     }
   },
-  authCompany = async (req, res, next) => {
+  authCompany : async (req, res, next) => {
     try {
       if(req.headers.hasOwnProperty('token')) {
         const decoded = verifyToken(req.headers.token)
