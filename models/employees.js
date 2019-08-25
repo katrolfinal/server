@@ -20,7 +20,7 @@ const employeeSchema = new Schema({
   email : {
     type: String
   },
-  department : {
+  position : {
     type: String
   },
   contacts : [{

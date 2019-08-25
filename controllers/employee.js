@@ -46,16 +46,15 @@ class EmployeeController {
         fs.unlinkSync(filePath)
         const arr = []
         Sheet1.forEach(emp => { 
-          // emp.company = req.company._id 
+          emp.company = req.company._id 
           emp.password = getPassword.generate({
             length: 8,
             numbers: true
           })
-          console.log(emp)
           arr.push(Employee.create(emp))
         })
         const result = await Promise.all(arr)
-        res.status(200).json(result)
+        res.status(201).json(result)
       } else throw {status : 400, message : 'No file'}
     } catch (error) {
       next(error)
@@ -64,8 +63,12 @@ class EmployeeController {
 
   static async createOne (req, res, next) {
     try {
-      const { name, address, phone, email, department } = req.body
-      const input = { name, address, phone, email, department }
+      const { name, address, phone, email, position } = req.body
+      const input = { name, address, phone, email, position }
+      input.password = getPassword.generate({
+        length: 8,
+        numbers: true
+      })
       input.company = req.company._id
       const result = await Employee.create(input)
       res.status(201).json(result)
@@ -78,9 +81,12 @@ class EmployeeController {
     try {
       const employee = await Employee.findById(req.params.employeeId)
       if(employee) {
-        const {} = req.body
-        const input = {}
-        const update = await Employee.updateOne(input, {_id : req.params.employeeId})
+        console.log(employee, 'dari databasenay')
+        const { name, address, phone, email, position } = req.body
+        const input = { name, address, phone, email, position }
+        console.log(input, 'input <<<<<<')
+        const update = await Employee.updateOne({_id: req.params.employeeId}, input)
+        console.log(update)
         res.status(200).json(update)
       } else throw {status : 404, resource : 'Employee'}
     } catch (error) {
@@ -93,7 +99,7 @@ class EmployeeController {
       const employee = await Employee.findById(req.params.employeeId)
       if(employee) {
         const result = await Employee.deleteOne({ _id : req.params.employeeId})
-        res.status(result).json(result)
+        res.status(200).json(result)
       } else throw { status : 404, resource : 'employee'}
     } catch (error) {
       next(error)
@@ -108,6 +114,8 @@ class EmployeeController {
         const employee = await Employee.findById(req.params.employeeId)
         if(employee) {
           employee.push(contacts)
+          const result = await employee.save()
+          res.status(200).json( result )
         } else throw { status : 404, resource : 'employee'}
       } else throw { status: 400, message : 'Employee required'} 
     } catch (error) {

@@ -8,16 +8,16 @@ chai.use(chaiHttp);
 const image = require('fs').readFileSync('./test/image.png')
 let fileBucket = null
 
-before(async () => {
-    await createCompany()
-})
-
-after(async () => {
-    await deleteAllCompany()
-    await deleteFile(fileBucket)
-})
 
 describe('success case', function() {
+    before(async () => {
+        await createCompany()
+    })
+    
+    after(async () => {
+        await deleteAllCompany()
+        await deleteFile(fileBucket)
+    })
     this.timeout(10000)
     describe('GET, company', () => {
         it('should get all companies', function (done) {
