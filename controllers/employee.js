@@ -102,13 +102,14 @@ class EmployeeController {
 
   static async addContact(req, res, next ) {
     try {
-      const { contacts } = req.body
-      if(employees) {
+      const { contact } = req.body
+      const newEmployee = await Employee.findById(contact)
+      if(newEmployee) {
         const employee = await Employee.findById(req.params.employeeId)
         if(employee) {
           employee.push(contacts)
         } else throw { status : 404, resource : 'employee'}
-      } else throw { status: 400, message : 'Employees required'} 
+      } else throw { status: 400, message : 'Employee required'} 
     } catch (error) {
       next(error)
     }
