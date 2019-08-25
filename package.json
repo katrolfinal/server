@@ -45,6 +45,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.10",
     "multer": "^1.4.2",
+    "node-xlsx": "^0.15.0",
     "redis": "^2.8.0"
   },
   "devDependencies": {
@@ -52,5 +53,6 @@
     "chai-http": "^4.3.0",
     "dotenv": "^8.1.0",
     "mocha": "^6.2.0"
-  }
+  },
+  "pkg": {}
 }

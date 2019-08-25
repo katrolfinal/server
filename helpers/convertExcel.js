@@ -13,7 +13,7 @@ module.exports = (filepath) => {
       A: 'name',
       B: 'address',
       C: 'phone',
-      D: 'department',
+      D: 'position',
       E: 'email'
     }
   })

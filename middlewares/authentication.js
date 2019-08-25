@@ -8,7 +8,7 @@ module.exports = {
     try {
       if(req.headers.hasOwnProperty('token')) {
         const decoded = verifyToken(req.headers.token)
-        const employee = Employee.findById(decoded._id)
+        const employee = await Employee.findById(decoded._id)
         if(employee) {
           req.employee = employee
           next()
@@ -21,9 +21,9 @@ module.exports = {
   authCompany : async (req, res, next) => {
     try {
       if(req.headers.hasOwnProperty('token')) {
-        const decoded = verifyToken(req.headers.token)
-        const company = Company.findById(decoded._id)
-        if(company) {
+        const {company} = verifyToken(req.headers.token)
+        const check = await Company.findById(company._id)
+        if(check) {
           req.company = company
           next()
         } else throw {}
