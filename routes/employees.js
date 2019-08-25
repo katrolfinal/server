@@ -33,14 +33,14 @@ router.use(authCompany)
 router.get('/byCompany/:companyId', EmployeeController)
 router.get('/byloggedin', EmployeeController.findById)
 router.get('/contacts', EmployeeController)
-router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert)
-router.post('/single', EmployeeController.createOne)
+router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert) //
+router.post('/single', EmployeeController.createOne) //
 router.post('/uploadImage', uploadImage.single('file'), sendUploadToGCS, EmployeeController)
 router.post('/login', EmployeeController.login)
-router.post('/contacts/:employeeId', EmployeeController.addContact)
-router.delete('/:employeeId', EmployeeController.delete)
+router.post('/contacts/:employeeId', EmployeeController.addContact) 
+router.delete('/:employeeId', EmployeeController.delete) //
 router.delete('/contacts/:employeeId', EmployeeController.deleteContact)
-router.put('/:employeeId', EmployeeController.update)
+router.put('/:employeeId', EmployeeController.update) //
 
 
 

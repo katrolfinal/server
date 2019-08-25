@@ -222,4 +222,8 @@ describe.only('Crud employees for company' , () => {
       expect(res.body.errors).to.include('you must login first');
     })
   })
+
+  describe('for mobile', () => {
+    memekmekmekmekmemekmemekmemekmemekmemekmememekmememekmememekmememekmememekmememekmememekmememekmememekmememekmememekmememekmememekmememek
+  })
 })
