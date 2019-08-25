@@ -13,6 +13,7 @@ exports.sendUploadToGCS = (req, res, next) => {
     if (!req.file) {
       return next()
     }
+    
 
     const bucketName = 'nfcard-bucket';
     const bucket = storage.bucket(bucketName);
@@ -34,6 +35,7 @@ exports.sendUploadToGCS = (req, res, next) => {
         req.file.cloudStorageObject = gcsFileName;
         return file.makePublic()
           .then(() => {
+              
               req.file.gcsUrl = gcsHelpers.getPublicUrl(bucketName, gcsFileName);
               next();
           });

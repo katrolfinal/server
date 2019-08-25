@@ -31,7 +31,7 @@ class EmployeeController {
 
   static async findByCompany(req, res, next) {
     try {
-      const employees = await Employee.find({company : req.params.companyId})
+      const employees = await Employee.find({company : req.employee.company})
       res.status(200).json(employees)
     } catch (error) {
       next(error)
@@ -81,12 +81,9 @@ class EmployeeController {
     try {
       const employee = await Employee.findById(req.params.employeeId)
       if(employee) {
-        console.log(employee, 'dari databasenay')
         const { name, address, phone, email, position } = req.body
         const input = { name, address, phone, email, position }
-        console.log(input, 'input <<<<<<')
         const update = await Employee.updateOne({_id: req.params.employeeId}, input)
-        console.log(update)
         res.status(200).json(update)
       } else throw {status : 404, resource : 'Employee'}
     } catch (error) {
@@ -108,16 +105,13 @@ class EmployeeController {
 
   static async addContact(req, res, next ) {
     try {
-      const { contact } = req.body
-      const newEmployee = await Employee.findById(contact)
+      const employee = await Employee.findById(req.employee._id)
+      const newEmployee = await Employee.findById(req.params.employeeId)
       if(newEmployee) {
-        const employee = await Employee.findById(req.params.employeeId)
-        if(employee) {
-          employee.push(contacts)
-          const result = await employee.save()
-          res.status(200).json( result )
-        } else throw { status : 404, resource : 'employee'}
-      } else throw { status: 400, message : 'Employee required'} 
+        employee.contacts.push(req.params.employeeId)
+        const result = await employee.save()
+        res.status(200).json( result )
+      } else throw { status : 404, resource : 'employee'}
     } catch (error) {
       next(error)
     }
@@ -125,12 +119,14 @@ class EmployeeController {
 
   static async deleteContact(req, res, next) {
     try {
-      const employee = Employee.findById(req.user._id)
+      const employee = await Employee.findById(req.employee._id)
       if(employee) {
-        const index = employee.contacts.indexOf(req.params.contactId)
-        employee.contacts.splice(index, 1)
-        const result = await employee.save()
-        res.status(200).json(result)
+        const index = employee.contacts.indexOf(req.params.employeeId)
+        if(index > -1) {
+          employee.contacts.splice(index, 1)
+          const result = await employee.save()
+          res.status(200).json(result)
+        } else throw { status : 404, resource : 'employee'} 
       } else throw { status : 404, resource : 'employee'}
     } catch (error) {
       next(error)
@@ -140,13 +136,14 @@ class EmployeeController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body
+      
       const employee = await Employee.findOne({email, password})
       if(employee) {
         delete employee.password
-        console.log(employee)
-        const token = getToken(employee)
+        
+        const token = getToken({employee})
         res.status(200).json({token, employee})
-      } else throw { status : 400, message: 'Wrong email / password'}
+      } else throw { status : 400, message: 'wrong email / password'}
     } catch (error) {
       next(error)
     }
@@ -154,6 +151,7 @@ class EmployeeController {
 
   static async uploadImage(req, res, next) {
     try {
+      console.log('mamakkkk')
       const { gcsUrl } = req.file
       const employee = await Employee.findByIdAndUpdate(req.employee._id, { image : gcsUrl }, {new : true})
       res.status(200).json(employee)

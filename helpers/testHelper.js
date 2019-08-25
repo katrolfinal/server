@@ -28,5 +28,14 @@ module.exports = {
 	},
 	deleteAllEmployees: async () => {
 		await Employee.deleteMany()
+	},
+	createEmployee: async () => {
+		const newEmp = await Employee.create({
+			email : 'nfcard@mail.com',
+			password : 'password',
+			name : 'nfcard',
+			phone : '10012030123123',
+			address : 'meme'
+		})
 	}
 }

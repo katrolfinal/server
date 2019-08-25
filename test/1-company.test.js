@@ -10,15 +10,16 @@ let fileBucket = null
 
 
 describe('success case', function() {
+    this.timeout(0)
     before(async () => {
         await createCompany()
+        console.log('company created')
     })
     
     after(async () => {
         await deleteAllCompany()
         await deleteFile(fileBucket)
     })
-    this.timeout(10000)
     describe('GET, company', () => {
         it('should get all companies', function (done) {
             chai
@@ -118,7 +119,7 @@ describe('error case', () => {
                 })
         })
     })
-    describe('Error register email already used', () => {
+    describe.skip('Error register email already used', () => {
         it('should return error, with status code (400)', (done) => {
             chai
                 .request(app)

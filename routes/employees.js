@@ -1,16 +1,14 @@
 const router = require('express').Router()
 const EmployeeController = require('../controllers/employee')
 const multer = require('multer')
-const { authCompany } = require('../middlewares/authentication')
+const { authCompany, authEmployee } = require('../middlewares/authentication')
 const { sendUploadToGCS } = require('../middlewares/gcs')
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) {
-    console.log(__basedir + '/excelTmp/')
     cb(null, '/Users/jays/hacktiv/pinal_projec/server/excelTmp/')
   },
   filename: function (req, file, cb) {
-    console.log(file, '<<<<<<<<')
     var datetimestamp = Date.now();
     cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
   }
@@ -19,28 +17,29 @@ var storage = multer.diskStorage({
 var uploadExcel = multer({ storage })
 
 
-var uploadImage = multer({
-  storage: multer.memoryStorage,
+const uploadImage = multer({
+  storage: multer.MemoryStorage,
   limits: {
-    fileSize: 5 * 1024 * 1024
-  }
-})
+      fileSize: 10 * 1024 * 1024, // Maximum file size is 10MB
+  },
+});
 
-router.get('/', EmployeeController.findALl)
+router.get('/', EmployeeController.findALl) // //
+router.post('/login', EmployeeController.login) /////
+
+
+
+router.get('/byCompany', authEmployee, EmployeeController.findByCompany) // 
+router.put('/uploadImage', authEmployee, uploadImage.single('image'), sendUploadToGCS, EmployeeController.uploadImage) //
+router.put('/contacts/:employeeId', authEmployee, EmployeeController.addContact) //
+router.delete('/contacts/:employeeId', authEmployee,  EmployeeController.deleteContact) //
+
 
 router.use(authCompany)
-
-router.get('/byCompany/:companyId', EmployeeController)
-router.get('/byloggedin', EmployeeController.findById)
-router.get('/contacts', EmployeeController)
-router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert) //
-router.post('/single', EmployeeController.createOne) //
-router.post('/uploadImage', uploadImage.single('file'), sendUploadToGCS, EmployeeController)
-router.post('/login', EmployeeController.login)
-router.post('/contacts/:employeeId', EmployeeController.addContact) 
-router.delete('/:employeeId', EmployeeController.delete) //
-router.delete('/contacts/:employeeId', EmployeeController.deleteContact)
-router.put('/:employeeId', EmployeeController.update) //
+router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert) // /////
+router.post('/single', EmployeeController.createOne) ////////
+router.delete('/:employeeId', EmployeeController.delete) // /////
+router.put('/:employeeId', EmployeeController.update) // /////
 
 
 
