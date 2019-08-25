@@ -8,18 +8,18 @@ chai.use(chaiHttp);
 const image = require('fs').readFileSync('./test/image.png')
 let fileBucket = null
 
+before(async () => {
+    await createCompany()
+    console.log('company created')
+})
+
+after(async () => {
+    await deleteAllCompany()
+    await deleteFile(fileBucket)
+})
 
 describe('success case', function() {
     this.timeout(0)
-    before(async () => {
-        await createCompany()
-        console.log('company created')
-    })
-    
-    after(async () => {
-        await deleteAllCompany()
-        await deleteFile(fileBucket)
-    })
     describe('GET, company', () => {
         it('should get all companies', function (done) {
             chai
@@ -119,9 +119,9 @@ describe('error case', () => {
                 })
         })
     })
-    describe.skip('Error register email already used', () => {
-        it('should return error, with status code (400)', (done) => {
-            chai
+    describe('Error register email already used', () => {
+        it('should return error, with status code (400)', async () => {
+            const response = await chai
                 .request(app)
                 .post('/api/company/register')
                 .send({
@@ -130,11 +130,26 @@ describe('error case', () => {
                     image: 'image.jpg',
                     name: 'companyy'
                 })
-                .then(response => {
-                    expect(response.body).to.have.property('errors')
-                    expect(response.status).to.be.equal(400)
-                    done()
+            
+            
+            expect(response.body).to.have.property('errors')
+            expect(response.status).to.be.equal(400)
+        })
+        it('should error when creating invalid email - (code : 400)', async () => {
+            const response = await chai
+                .request(app)
+                .post('/api/company/register')
+                .send({
+                    email : 'mantul',
+                    password : '12345679',
+                    image: 'image.jpg',
+                    name: 'companyy'
                 })
+            
+            expect(response).to.have.status(400)
+            expect(response.body).to.be.an('object')
+            expect(response.body).to.have.property('errors')
+            expect(response.body.errors).to.include('invalid email !')
         })
     })
 })
