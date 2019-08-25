@@ -113,6 +113,19 @@ HEADERS : {
 ```
 output : `{ astagadul }`
 
+#### Update 
+
++ update one employee
+```
+Need company authentication
+
+method : UPDATE
+
+HEADERS : {
+  token : companyId
+}
+```
+
 #### Delete
 
 + delete one employee
