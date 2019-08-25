@@ -7,9 +7,10 @@ module.exports = {
   authEmployee : async (req, res, next) => {
     try {
       if(req.headers.hasOwnProperty('token')) {
-        const decoded = verifyToken(req.headers.token)
-        const employee = await Employee.findById(decoded._id)
-        if(employee) {
+        const {employee} = verifyToken(req.headers.token)
+        
+        const check = await Employee.findById(employee._id)
+        if(check) {
           req.employee = employee
           next()
         } else throw {}

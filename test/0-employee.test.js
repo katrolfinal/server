@@ -7,16 +7,20 @@ const fs = require('fs')
 
 let companyId
 let token = {
-  emplooyee : '',
+  employee : '',
   company: ''
 }
+let employeeLogin
+let contactId
 let employeeAcc
-console.log(__dirname)
+
 let excelFile = fs.readFileSync(`${__dirname}/excel.xlsx`)
+const image = fs.readFileSync('./test/image.png')
 
 chai.use(chaiHttp)
 
-describe.only('Crud employees for company' , () => {
+describe('Employee testing' , function () {
+  this.timeout(0)
   before(async () => {
     await createCompany()
     console.log('company created')
@@ -27,6 +31,7 @@ describe.only('Crud employees for company' , () => {
     await deleteAllEmployees()
     console.log('database cleared')
   })
+
   it('should return token & company data', (done) => {
     chai
       .request(app)
@@ -65,6 +70,7 @@ describe.only('Crud employees for company' , () => {
       expect(res.body[0]).to.have.property('password')
       expect(res.body[0].company).to.equal(companyId)
       employeeAcc = res.body[0]
+      employeeLogin = res.body[1]
     });
 
     it('should error when sending without excel file - (code - 400)', async () => {
@@ -84,6 +90,8 @@ describe.only('Crud employees for company' , () => {
         .request(app)
         .post('/api/employees')
         .attach('file', excelFile, 'excel.xslx')
+      
+
       
       expect(res).to.have.status(400)
       expect(res.body).to.be.an('object');
@@ -202,6 +210,8 @@ describe.only('Crud employees for company' , () => {
       expect(res.body.phone).to.equal(data.phone)
       expect(res.body.position).to.equal(data.position)
       expect(res.body.email).to.equal(data.email)
+      expect(res.body).to.have.property('_id')
+      contactId = res.body._id
     })
     it('should error when create single employee without token', async () => {
       const data ={ 
@@ -220,6 +230,121 @@ describe.only('Crud employees for company' , () => {
       expect(res.body).to.be.an('object');
       expect(res.body).to.have.property('errors');
       expect(res.body.errors).to.include('you must login first');
+    })
+  })
+
+  describe('for mobile', () => {
+    it('should login employee - (code : 200)', async () => {
+      
+      const data = {
+        email : employeeLogin.email,
+        password : employeeLogin.password
+      }
+      const res = await chai
+        .request(app)
+        .post('/api/employees/login')
+        .send(data)
+
+  
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('token')
+      expect(res.body).to.have.property('employee')
+      token.employee = res.body.token
+    });
+    it('should error when login with wrong email / password - (code : 400)', async () => {
+      const data = {
+        email : 'awjaodjaidjw@mail.com',
+        password : employeeAcc.password
+      }
+
+      const res = await chai
+        .request(app)
+        .post('/api/employees/login')
+        .send(data)
+
+      
+      expect(res).to.have.status(400)
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('wrong email / password')
+    })
+    it('should get all employee list - (code : 200)', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/employees/')
+      
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('array')
+    })
+    it('should get all company by company id - (code - 200)', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/employees/byCompany/')
+        .set('token', token.employee)
+
+      
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('array')
+      expect(res.body[0].company).to.equal(companyId)
+    })
+    it('should upload image for employee - (code - 200)', async () => {
+      const res = await chai
+        .request(app)
+        .put('/api/employees/uploadImage')
+        .set('token', token.employee)
+        .attach('image', image, 'image.png')
+      
+      console.log(res.body, 'uppload ')
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('image')
+    })
+    it('should add to contact - (code - 200)', async () => {
+      const res = await chai
+        .request(app)
+        .put('/api/employees/contacts/'+contactId)
+        .set('token', token.employee)
+      
+      
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('contacts')
+      expect(res.body.contacts).to.include(contactId)
+    })
+    it('should delete contact - (code - 200)', async () => {
+      const res = await chai
+        .request(app)
+        .delete('/api/employees/contacts/'+contactId)
+        .set('token', token.employee)
+      
+      
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('contacts')
+      expect(res.body.contacts.includes(contactId)).to.equal(false)
+    })
+    it('should send error when add nonexistent employee - (code : 404)', async () => {
+      const res = await chai
+        .request(app)
+        .put('/api/employees/contacts/d192912h98dn')
+        .set('token', token.employee)
+      
+      
+      expect(res).to.have.status(404)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('employee not found !')
+    })
+    it('should send error when delete nonexistent employee - (code : 404)', async () => {
+      const res = await chai
+        .request(app)
+        .delete('/api/employees/contacts/'+contactId)
+        .set('token', token.employee)
+
+      expect(res).to.have.status(404)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('employee not found !')
     })
   })
 })
