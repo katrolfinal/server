@@ -12,11 +12,12 @@ const port = process.env.PORT || 3000
 const url = process.env.MONGODB_URL || `mongodb://localhost:27017/final-project-${process.env.NODE_ENV}`
 const errorHandler = require('./middlewares/errorHandler')
 
-mongoose.connect(url, {
+mongoose.connect(url, /* istanbul ignore next */ {
   useNewUrlParser: true,
   useCreateIndex: true,
 }, (err) => {
-  if(err) console.log('mongo error')
+  /* istanbul ignore if */
+  if(err)  console.log('mongo error')
   else process.env.MONGODB_URL ? console.log('Connected db deploy') : console.log('Connected db ' + process.env.NODE_ENV)
 });
 

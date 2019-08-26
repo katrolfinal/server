@@ -37,6 +37,7 @@ router.put('/contacts/:employeeId', authEmployee, EmployeeController.addContact)
 router.delete('/contacts/:employeeId', authEmployee,  EmployeeController.deleteContact) //
 
 
+
 router.use(authCompany)
 router.post('/', uploadExcel.single('file'), EmployeeController.bulkInsert) // /////
 router.post('/single', EmployeeController.createOne) ////////

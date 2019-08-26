@@ -26,8 +26,10 @@ exports.sendUploadToGCS = (req, res, next) => {
         },
     });
 
-    stream.on('error', (err) => {
+    stream.on('error',/* istanbul ignore next */ (err) => {
+        /* istanbul ignore next */
         req.file.cloudStorageError = err;
+        /* istanbul ignore next */
         next(err);
     });
 
