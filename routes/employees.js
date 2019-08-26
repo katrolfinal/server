@@ -3,10 +3,12 @@ const EmployeeController = require('../controllers/employee')
 const multer = require('multer')
 const { authCompany, authEmployee } = require('../middlewares/authentication')
 const { sendUploadToGCS } = require('../middlewares/gcs')
+const path = require('path')
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) {
-    cb(null, '/Users/jays/hacktiv/pinal_projec/server/excelTmp/')
+    console.log(path.join(__dirname, '../excelTmp/'), '<<<<<<<<<<<<<<')
+    cb(null, path.join(__dirname, '../excelTmp/'))
   },
   filename: function (req, file, cb) {
     var datetimestamp = Date.now();

@@ -2,6 +2,7 @@ const Employee = require('../models/employees')
 const convertExcel = require('../helpers/convertExcel')
 const getPassword = require('generate-password')
 const { getToken } = require('../helpers/jwt')
+const path = require('path')
 const fs = require('fs')
 global.__basedir = __dirname;
 
@@ -41,7 +42,8 @@ class EmployeeController {
   static async bulkInsert(req, res, next) {
     try {
       if(req.file) {
-        const filePath = '/Users/jays/hacktiv/pinal_projec/server/excelTmp/' + req.file.filename
+        const filePath = path.join(__dirname, `../excelTmp/${req.file.filename}`)
+        console.log(filePath)
         const { Sheet1 } = convertExcel(filePath)
         fs.unlinkSync(filePath)
         const arr = []
@@ -151,7 +153,7 @@ class EmployeeController {
 
   static async uploadImage(req, res, next) {
     try {
-      console.log('mamakkkk')
+      
       const { gcsUrl } = req.file
       const employee = await Employee.findByIdAndUpdate(req.employee._id, { image : gcsUrl }, {new : true})
       res.status(200).json(employee)
