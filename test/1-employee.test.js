@@ -294,7 +294,7 @@ describe('Employee testing' , function () {
         .set('token', token.employee)
         .attach('image', image, 'image.png')
       
-      console.log(res.body, 'uppload ')
+      
       expect(res).to.have.status(200)
       expect(res.body).to.be.an('object')
       expect(res.body).to.have.property('image')
