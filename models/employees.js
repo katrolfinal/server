@@ -5,7 +5,8 @@ const employeeSchema = new Schema({
     type : String
   },
   image : {
-    type: String
+    type: String,
+    default: null
   },
   address : {
     type: String,

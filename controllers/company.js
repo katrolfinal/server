@@ -28,8 +28,8 @@ class CompanyController {
 
   static async create (req, res, next) {
     try {
-      const { email, name, password } = req.body
-      const input = { email, name, password }
+      const { email, username, password } = req.body
+      const input = { email, username, password }
       if(req.file && req.file.gcsUrl) { 
         input.logo = req.file.gcsUrl
       } 
