@@ -144,7 +144,7 @@ class EmployeeController {
       if(employee) {
         delete employee.password
         console.log(employee)
-        const token = getToken(employee)
+        const token = getToken({employee})
         res.status(200).json({token, employee})
       } else throw { status : 400, message: 'Wrong email / password'}
     } catch (error) {
