@@ -231,6 +231,25 @@ describe('Employee testing' , function () {
       expect(res.body).to.have.property('errors');
       expect(res.body.errors).to.include('you must login first');
     })
+    it('should error when create single employee without email', async () => {
+      const data ={ 
+        name : 'jono',
+        address : 'jono',
+        phone: '02929292',
+        position : 'satpam'
+      }
+      const res = await chai
+        .request(app)
+        .post('/api/employees/single')
+        .set('token', token.company)
+        .send(data)
+
+      
+      expect(res).to.have.status(400)
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('errors');
+      expect(res.body.errors).to.include('email is required');
+    })
   })
 
   describe('for mobile', () => {

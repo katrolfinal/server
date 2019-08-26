@@ -17,6 +17,7 @@ module.exports = {
         } else throw {}
       } else throw {}
     } catch ( /* istanbul ignore next */ error) {
+      /* istanbul ignore next */
       next({status : 400, message : 'you must login first'})
     }
   },

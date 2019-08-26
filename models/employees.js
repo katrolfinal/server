@@ -8,17 +8,20 @@ const employeeSchema = new Schema({
     type: String
   },
   address : {
-    type: String
+    type: String,
+    
   },
   phone : {
-    type: String
+    type: String,
+    
   },
   company : {
     type: Schema.Types.ObjectId,
     ref : 'Company'
   },
   email : {
-    type: String
+    type: String,
+    required: [true, 'email is required']
   },
   position : {
     type: String

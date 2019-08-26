@@ -13,19 +13,7 @@ class EmployeeController {
       const employees = await Employee.find()
       res.status(200).json(employees)
     } catch (error) {
-      next(error)
-    }
-  }
-
-  static async findById(req, res, next) {
-    try {
-      const employee = await Employee.findById(req.employee._id)
-                              .populate('contacts')
-                              .populate('company')
-      if(employee) {
-        res.status(200).json(employee)
-      } else throw { status: 404, resource: 'employee'}
-    } catch (error) {
+      /* istanbul ignore next */
       next(error)
     }
   }
@@ -35,6 +23,7 @@ class EmployeeController {
       const employees = await Employee.find({company : req.employee.company})
       res.status(200).json(employees)
     } catch (error) {
+      /* istanbul ignore next */
       next(error)
     }
   }
@@ -139,7 +128,7 @@ class EmployeeController {
     try {
       const { email, password } = req.body
       
-      const employee = await Employee.findOne({email, password})
+      const employee = await Employee.findOne({email, password}).populate('contacts').populate('company')
       if(employee) {
         delete employee.password
         
