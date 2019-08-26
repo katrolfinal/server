@@ -20,10 +20,9 @@ class EmployeeController {
 
   static async findByCompany(req, res, next) {
     try {
-      const employees = await Employee.find({company : req.employee.company})
+      const employees = await Employee.find({company : req.employee ? req.employee.company : req.company._id})
       res.status(200).json(employees)
     } catch (error) {
-      /* istanbul ignore next */
       next(error)
     }
   }
@@ -32,7 +31,6 @@ class EmployeeController {
     try {
       if(req.file) {
         const filePath = path.join(__dirname, `../excelTmp/${req.file.filename}`)
-        console.log(filePath)
         const { Sheet1 } = convertExcel(filePath)
         fs.unlinkSync(filePath)
         const arr = []
