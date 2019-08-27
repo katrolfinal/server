@@ -20,7 +20,10 @@ class EmployeeController {
 
   static async findByCompany(req, res, next) {
     try {
-      const employees = await Employee.find({company : req.employee ? req.employee.company : req.company._id})
+      const employees = await Employee
+                        .find({company : req.employee ? req.employee.company : req.company._id})
+                        .populate('contacts')
+                        .populate('company')
       res.status(200).json(employees)
     } catch (error) {
       next(error)
@@ -126,7 +129,9 @@ class EmployeeController {
     try {
       const { email, password } = req.body
       
-      const employee = await Employee.findOne({email, password}).populate('contacts').populate('company')
+      const employee = await Employee.findOne({email, password})
+                                      .populate('contacts')
+                                      .populate('company')
       if(employee) {
         delete employee.password
         
