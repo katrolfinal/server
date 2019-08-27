@@ -24,8 +24,10 @@ class EmployeeController {
 
   static async findById(req, res, next) {
     try {
-      const employee = await Employee.find()
-      res.status(200).json(employee)
+      console.log('tertrigger')
+      const employee = await Employee.findById(req.params.employeeId)
+      if(employee) res.status(200).json(employee)
+      else throw {status : 404, resource : 'employee'}      
     } catch (error) {
       /* istanbul ignore next */
       next(error)

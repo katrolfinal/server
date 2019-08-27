@@ -389,5 +389,29 @@ describe('Employee testing' , function () {
       expect(res.body).to.have.property('errors')
       expect(res.body.errors).to.include('employee not found !')
     })
+    it('should get single employee by id - (code : 200)', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/employees/byId/'+contactId)
+        .set('token', token.employee)
+
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('company')
+      expect(res.body).to.have.property('name')
+      expect(res.body).to.have.property('email')
+      expect(res.body).to.have.property('password')
+    })
+    it('should send error when find nonexistent id - (code : 404)', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/employees/byId/'+employeeAcc._id)
+        .set('token', token.employee)
+
+      expect(res).to.have.status(404)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('employee not found !')
+    })
   })
 })
