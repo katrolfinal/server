@@ -1,16 +1,36 @@
 const Company = require('../models/companies')
 const { comparePassword } = require('../helpers/bcrypt')
 const { getToken } = require('../helpers/jwt')
+const client = require('redis').createClient()
+client.on('error', (err) => {
+  /* istanbul ignore next */
+  console.log("Error " + err);
+});
+
 
 class CompanyController {
   
   static async findAll(req, res, next) {
-    try {
-      const companies = await Company.find()
-      res.status(200).json(companies)
-    } catch (error) {
-      next(error)
-    }
+    client.get('companies', async (err, result) => {
+      if(err) {
+        /* istanbul ignore next */
+        next(err)
+      } else {
+        if(result) {
+          res.status(200).json(JSON.parse(result))
+        } else {
+          try {
+            /* istanbul ignore next */
+            const companies = await Company.find()
+            client.setex('companies', 60 * 60, JSON.stringify(companies))
+            res.status(200).json(companies)
+          } catch (error) {
+            /* istanbul ignore next */
+            next(error)
+          }
+        }
+      }
+    })
   }
 
   static async login (req, res, next) {

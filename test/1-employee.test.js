@@ -250,6 +250,30 @@ describe('Employee testing' , function () {
       expect(res.body).to.have.property('errors');
       expect(res.body.errors).to.include('email is required');
     })
+
+    it('should error when delete nonexistent employee - (code - 404)', async () => {
+      const res = await chai
+        .request(app)
+        .delete('/api/employees/'+companyId)
+        .set('token', token.company)
+      
+      expect(res).to.have.status(404)
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('employee not found !')
+    })
+
+    it('should error when update nonexistent employee - (code - 404)', async () => {
+      const res = await chai
+        .request(app)
+        .put('/api/employees/'+companyId)
+        .set('token', token.company)
+        .send(employeeAcc)
+      
+      expect(res).to.have.status(404)
+      expect(res.body).to.be.an('object')
+      expect(res.body).to.have.property('errors')
+      expect(res.body.errors).to.include('employee not found !')
+    })
   })
 
   describe('for mobile', () => {

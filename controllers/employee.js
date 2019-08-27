@@ -5,9 +5,13 @@ const { getToken } = require('../helpers/jwt')
 const path = require('path')
 const fs = require('fs')
 global.__basedir = __dirname;
+const client = require('redis').createClient()
+client.on('error', (err) => {
+  /* istanbul ignore next */
+  console.log("Error " + err);
+});
 
 class EmployeeController {
-  
   static async findALl(req, res, next) {
     try {
       const employees = await Employee.find()
@@ -19,12 +23,23 @@ class EmployeeController {
   }
 
   static async findByCompany(req, res, next) {
-    try {
-      const employees = await Employee.find({company : req.employee ? req.employee.company : req.company._id})
-      res.status(200).json(employees)
-    } catch (error) {
-      next(error)
-    }
+    client.get('forCompany', async (err, result) => {
+      if(err) /* istanbul ignore next */ return next(err)
+      else {
+        /* istanbul ignore if */
+        /* istanbul ignore else */
+        if(result && req.path === '/forCompany/') /* istanbul ignore next */ res.status(200).json(JSON.parse(result))
+        else {
+          try {
+            const employees = await Employee.find({company : req.employee ? req.employee.company : req.company._id})
+            if(req.path === '/forCompany/') client.setex('forCompany', 60 * 60, JSON.stringify(employees))
+            res.status(200).json(employees)
+          } catch (error) {
+            next(error)
+          }
+        }
+      }
+    })
   }
 
   static async bulkInsert(req, res, next) {
@@ -74,7 +89,7 @@ class EmployeeController {
         const input = { name, address, phone, email, position }
         const update = await Employee.updateOne({_id: req.params.employeeId}, input)
         res.status(200).json(update)
-      } else throw {status : 404, resource : 'Employee'}
+      } else throw {status : 404, resource : 'employee'}
     } catch (error) {
       next(error)
     }
@@ -109,6 +124,7 @@ class EmployeeController {
   static async deleteContact(req, res, next) {
     try {
       const employee = await Employee.findById(req.employee._id)
+      /* istanbul ignore else */
       if(employee) {
         const index = employee.contacts.indexOf(req.params.employeeId)
         if(index > -1) {
@@ -125,7 +141,6 @@ class EmployeeController {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body
-      
       const employee = await Employee.findOne({email, password}).populate('contacts').populate('company')
       if(employee) {
         delete employee.password
@@ -140,11 +155,11 @@ class EmployeeController {
 
   static async uploadImage(req, res, next) {
     try {
-      
       const { gcsUrl } = req.file
       const employee = await Employee.findByIdAndUpdate(req.employee._id, { image : gcsUrl }, {new : true})
       res.status(200).json(employee)
     } catch (error) {
+      /* istanbul ignore next */
       next(error)
     }
   }
