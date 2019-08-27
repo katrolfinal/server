@@ -1,0 +1,61 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test nyc mocha --timeout 0   --exit",
+    "dev": "NODE_ENV=development nodemon app.js"
+  },
+  "nyc": {
+    "_comment": "Purpose of this part: to do code coverage within Mocha/Chai using Istanbul",
+    "register": "babel-register",
+    "include": [
+      "**/*.js",
+      "./*.js"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/test/**",
+      "**/coverage/**",
+      "**/testHelper**",
+      "**/errorHandler**",
+      "**/google-cloud-storage**"
+    ],
+    "all": true,
+    "reporter": ["html", "text"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katrolfinal/server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katrolfinal/server/issues"
+  },
+  "homepage": "https://github.com/katrolfinal/server#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^3.2.0",
+    "axios": "^0.19.0",
+    "bcryptjs": "^2.4.3",
+    "convert-excel-to-json": "^1.6.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "generate-password": "^1.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.10",
+    "multer": "^1.4.2",
+    "node-xlsx": "^0.15.0",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "dotenv": "^8.1.0",
+    "mocha": "^6.2.0"
+  },
+  "pkg": {}
+}
