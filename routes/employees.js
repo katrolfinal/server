@@ -30,7 +30,7 @@ router.get('/', EmployeeController.findALl) // //
 router.post('/login', EmployeeController.login) /////
 
 
-
+router.get('/:employeeId', authEmployee, EmployeeController.findById) //
 router.get('/byCompany', authEmployee, EmployeeController.findByCompany) // 
 router.put('/uploadImage', authEmployee, uploadImage.single('image'), sendUploadToGCS, EmployeeController.uploadImage) //
 router.put('/contacts/:employeeId', authEmployee, EmployeeController.addContact) //

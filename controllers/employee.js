@@ -22,6 +22,16 @@ class EmployeeController {
     }
   }
 
+  static async findById(req, res, next) {
+    try {
+      const employee = await Employee.find()
+      res.status(200).json(employee)
+    } catch (error) {
+      /* istanbul ignore next */
+      next(error)
+    }
+  }
+
   static async findByCompany(req, res, next) {
     client.get('forCompany', async (err, result) => {
       if(err) /* istanbul ignore next */ return next(err)
