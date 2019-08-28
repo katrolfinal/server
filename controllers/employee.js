@@ -24,8 +24,7 @@ class EmployeeController {
 
   static async findById(req, res, next) {
     try {
-      console.log('tertrigger')
-      const employee = await Employee.findById(req.params.employeeId)
+      const employee = await Employee.findById(req.params.employeeId).populate('company').populate('contacts')
       if(employee) res.status(200).json(employee)
       else throw {status : 404, resource : 'employee'}      
     } catch (error) {
@@ -44,6 +43,7 @@ class EmployeeController {
         else {
           try {
             const employees = await Employee.find({company : req.employee ? req.employee.company : req.company._id})
+                                            .populate('company')
             if(req.path === '/forCompany/') client.setex('forCompany', 60 * 60, JSON.stringify(employees))
             res.status(200).json(employees)
           } catch (error) {

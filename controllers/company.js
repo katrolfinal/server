@@ -48,9 +48,9 @@ class CompanyController {
 
   static async create (req, res, next) {
     try {
-      const { email, username, password, color } = req.body
-      console.log(color, 'warna')
-      const input = { email, username, password, color }
+      const { email, username, password, color, name } = req.body
+      
+      const input = { email, username, password, color, name }
       if(req.file && req.file.gcsUrl) { 
         input.logo = req.file.gcsUrl
       } 
@@ -58,6 +58,17 @@ class CompanyController {
       res.status(201).json(result)
     } catch (error) {
       // console.log('error: ', error);
+      next(error)
+    }
+  }
+
+  static async update (req, res, next) {
+    try {
+      const { email, username, password, color } = req.body
+      const input = { email, username, password, color }
+      const result = await Company.updateOne({_id: req.company._id}, input)
+      res.status(200).json(result)
+    } catch (error) {
       next(error)
     }
   }

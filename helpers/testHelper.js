@@ -11,11 +11,12 @@ module.exports = {
 		await Company.deleteMany()
 	},
 	createCompany: async () => {
-		await Company.create({
+		const company = await Company.create({
 			email: 'company@mail.com',
 			name: 'company',
 			password: '12345678'
 		})
+		
 	},
 	deleteFile: async (filename) => {
 		console.log('filename: ', filename);

@@ -20,9 +20,10 @@ const image = fs.readFileSync('./test/image.png')
 chai.use(chaiHttp)
 
 describe('Employee testing' , function () {
-  this.timeout(0)
+  this.timeout(3000)
+
   before(async () => {
-    // await createCompany()
+    await createCompany()
     console.log('company created')
   })
 
@@ -328,7 +329,7 @@ describe('Employee testing' , function () {
       
       expect(res).to.have.status(200)
       expect(res.body).to.be.an('array')
-      expect(res.body[0].company).to.equal(companyId)
+      expect(res.body[0].company._id).to.equal(companyId)
     })
     it('should upload image for employee - (code - 200)', async () => {
       const res = await chai
