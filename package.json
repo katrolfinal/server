@@ -38,7 +38,7 @@
   "homepage": "https://github.com/katrolfinal/server#readme",
   "dependencies": {
     "@google-cloud/storage": "^3.2.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "convert-excel-to-json": "^1.6.1",
     "cors": "^2.8.5",
